@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Tracker - Bhanu's Journey to 8-15 LPA</title>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Section */
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .user-info h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .user-info p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .streak-flame {
+            color: #ff9500;
+        }
+
+        .progress-bar-container {
+            margin-top: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #58cc02 0%, #46a302 100%);
+            height: 100%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+        }
+
+        .progress-text {
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Skill Tree Path */
+        .skill-tree {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .skill-module {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .skill-module.locked {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .skill-module.locked::after {
+            content: '🔒';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+        }
+
+        .skill-module.completed::after {
+            content: '✅';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+        }
+
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .module-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .module-icon {
+            font-size: 40px;
+        }
+
+        .module-title h2 {
+            color: #333;
+            font-size: 24px;
+        }
+
+        .module-title p {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .module-progress {
+            text-align: right;
+        }
+
+        .module-progress-text {
+            color: #58cc02;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .module-progress-bar {
+            width: 150px;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .module-progress-fill {
+            height: 100%;
+            background: #58cc02;
+            transition: width 0.5s ease;
+        }
+
+        /* Topics Grid */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .topic-card {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #58cc02;
+        }
+
+        .topic-card.completed {
+            background: #e8f5e9;
+            border-color: #58cc02;
+        }
+
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .topic-name {
+            font-weight: bold;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .topic-status {
+            font-size: 20px;
+        }
+
+        .topic-details {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .topic-time {
+            color: #999;
+            font-size: 12px;
+            margin-top: 8px;
+            display: block;
+        }
+
+        /* Practice Button */
+        .practice-btn {
+            background: #58cc02;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            transition: background 0.3s ease;
+        }
+
+        .practice-btn:hover {
+            background: #46a302;
+        }
+
+        .practice-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .close-btn {
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            background: none;
+            border: none;
+        }
+
+        .subtopics-list {
+            list-style: none;
+        }
+
+        .subtopic-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subtopic-item.completed {
+            background: #e8f5e9;
+        }
+
+        .checkbox-custom {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .complete-topic-btn {
+            background: #58cc02;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .complete-topic-btn:hover {
+            background: #46a302;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .stats {
+                width: 100%;
+                justify-content: space-around;
+            }
+
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .module-progress {
+                text-align: left;
+            }
+
+            .module-progress-bar {
+                width: 100%;
+            }
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn.primary {
+            background: #58cc02;
+            color: white;
+        }
+
+        .action-btn.secondary {
+            background: #1cb0f6;
+            color: white;
+        }
+
+        .action-btn.warning {
+            background: #ff9500;
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-top">
+                <div class="user-info">
+                    <h1>🎯 Bhanu's Learning Journey</h1>
+                    <p>Goal: 8-15 LPA Job | Timeline: 60 Days | You've got this! 💪</p>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-value"><span class="streak-flame">🔥</span><span id="streak-count">0</span></span>
+                        <span class="stat-label">Day Streak</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="topics-completed">0</span>
+                        <span class="stat-label">Topics Done</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="total-hours">0</span>
+                        <span class="stat-label">Hours Spent</span>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="overall-progress" style="width: 0%">
+                    <span class="progress-text">0% Complete</span>
+                </div>
+            </div>
+            <div class="quick-actions">
+                <button class="action-btn primary" onclick="manualSync()">☁️ Sync Now</button>
+                <button class="action-btn secondary" onclick="exportProgress()">📥 Export Backup</button>
+                <button class="action-btn warning" onclick="importProgress()">📤 Import Backup</button>
+                <button class="action-btn primary" onclick="resetProgress()" style="background: #ff3b30;">🔄 Reset All</button>
+            </div>
+        </div>
+
+        <!-- Skill Tree -->
+        <div class="skill-tree" id="skill-tree">
+            <!-- Modules will be generated here -->
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="topic-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Topic Details</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modal-body">
+                <!-- Subtopics will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Learning Path Data Structure
+        const learningPath = {
+            modules: [
+                {
+                    id: 'java8',
+                    title: 'Java 8 Features',
+                    icon: '☕',
+                    description: 'Modern Java - Streams, Lambdas, Functional Programming',
+                    estimatedHours: 15,
+                    unlocked: true,
+                    topics: [
+                        {
+                            id: 'lambdas',
+                            name: 'Lambda Expressions',
+                            time: '2 hours',
+                            details: 'Functional interfaces, syntax, practical examples',
+                            subtopics: [
+                                'Functional Interfaces',
+                                'Lambda Syntax & Structure',
+                                'Method References',
+                                'Practical Examples (Comparator, Runnable)',
+                                'Practice: 5 coding problems'
+                            ]
+                        },
+                        {
+                            id: 'streams',
+                            name: 'Stream API',
+                            time: '4 hours',
+                            details: 'filter, map, reduce, collect operations',
+                            subtopics: [
+                                'Stream Creation Methods',
+                                'Intermediate Operations (filter, map, flatMap)',
+                                'Terminal Operations (collect, reduce, forEach)',
+                                'Collectors Class',
+                                'Parallel Streams',
+                                'Practice: 10 coding problems'
+                            ]
+                        },
+                        {
+                            id: 'optional',
+                            name: 'Optional Class',
+                            time: '1.5 hours',
+                            details: 'Null safety, best practices',
+                            subtopics: [
+                                'Creating Optional Objects',
+                                'isPresent(), ifPresent()',
+                                'orElse(), orElseGet(), orElseThrow()',
+                                'map() and flatMap() with Optional',
+                                'Best Practices & Anti-patterns'
+                            ]
+                        },
+                        {
+                            id: 'datetime',
+                            name: 'Date/Time API',
+                            time: '2 hours',
+                            details: 'LocalDate, LocalTime, ZonedDateTime',
+                            subtopics: [
+                                'LocalDate, LocalTime, LocalDateTime',
+                                'Period and Duration',
+                                'ZonedDateTime & Time Zones',
+                                'Formatting and Parsing',
+                                'Practice: Date manipulation problems'
+                            ]
+                        },
+                        {
+                            id: 'defaultmethods',
+                            name: 'Default & Static Methods in Interfaces',
+                            time: '1.5 hours',
+                            details: 'Interface evolution, multiple inheritance',
+                            subtopics: [
+                                'Default Methods',
+                                'Static Methods in Interfaces',
+                                'Diamond Problem Resolution',
+                                'Real-world Examples',
+                                'Practice: Interface design problems'
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'corejava',
+                    title: 'Core Java Revision',
+                    icon: '📚',
+                    description: 'OOP, Collections, Exception Handling, Multithreading',
+                    estimatedHours: 20,
+                    unlocked: true,
+                    topics: [
+                        {
+                            id: 'oop',
+                            name: 'OOP Concepts',
+                            time: '3 hours',
+                            details: 'Inheritance, Polymorphism, Abstraction, Encapsulation',
+                            subtopics: [
+                                'Classes and Objects',
+                                'Inheritance (extends, super)',
+                                'Polymorphism (Overloading, Overriding)',
+                                'Abstraction (abstract class vs interface)',
+                                'Encapsulation & Access Modifiers',
+                                'Interview Questions (Top 20)'
+                            ]
+                        },
+                        {
+                            id: 'collections',
+                            name: 'Collections Framework',
+                            time: '5 hours',
+                            details: 'List, Set, Map, Queue - when to use what',
+                            subtopics: [
+                                'List (ArrayList, LinkedList)',
+                                'Set (HashSet, TreeSet, LinkedHashSet)',
+                                'Map (HashMap, TreeMap, LinkedHashMap)',
+                                'Queue & Deque',
+                                'Comparable vs Comparator',
+                                'Internal working of HashMap',
+                                'Practice: 10 collection problems'
+                            ]
+                        },
+                        {
+                            id: 'exceptions',
+                            name: 'Exception Handling',
+                            time: '2 hours',
+                            details: 'try-catch, custom exceptions, best practices',
+                            subtopics: [
+                                'Checked vs Unchecked Exceptions',
+                                'try-catch-finally',
+                                'try-with-resources',
+                                'Custom Exceptions',
+                                'Best Practices',
+                                'Interview Questions'
+                            ]
+                        },
+                        {
+                            id: 'multithreading',
+                            name: 'Multithreading Basics',
+                            time: '4 hours',
+                            details: 'Thread creation, synchronization, ExecutorService',
+                            subtopics: [
+                                'Thread Creation (extends Thread, Runnable)',
+                                'Thread Lifecycle',
+                                'Synchronization (synchronized keyword)',
+                                'wait(), notify(), notifyAll()',
+                                'ExecutorService Framework',
+                                'Common Interview Questions'
+                            ]
+                        },
+                        {
+                            id: 'strings',
+                            name: 'String Manipulation',
+                            time: '2 hours',
+                            details: 'String vs StringBuilder, common methods',
+                            subtopics: [
+                                'String Immutability',
+                                'String vs StringBuilder vs StringBuffer',
+                                'Common String Methods',
+                                'String Pool Concept',
+                                'Practice: 10 string problems'
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'springboot',
+                    title: 'Spring Boot Essentials',
+                    icon: '🍃',
+                    description: 'REST APIs, JPA, Security - Interview Ready',
+                    estimatedHours: 25,
+                    unlocked: false,
+                    topics: [
+                        {
+                            id: 'springbasics',
+                            name: 'Spring Boot Basics',
+                            time: '4 hours',
+                            details: 'Architecture, annotations, auto-configuration',
+                            subtopics: [
+                                'Spring vs Spring Boot',
+                                'Project Structure',
+                                'Key Annotations (@SpringBootApplication, @RestController)',
+                                'application.properties',
+                                'Create First REST API',
+                                'Postman Testing'
+                            ]
+                        },
+                        {
+                            id: 'restapi',
+                            name: 'REST API Development',
+                            time: '5 hours',
+                            details: 'CRUD operations, request/response handling',
+                            subtopics: [
+                                '@GetMapping, @PostMapping, @PutMapping, @DeleteMapping',
+                                '@PathVariable, @RequestParam, @RequestBody',
+                                'ResponseEntity & Status Codes',
+                                'Exception Handling (@ControllerAdvice)',
+                                'Validation (@Valid, @NotNull)',
+                                'Build 2 Complete APIs'
+                            ]
+                        },
+                        {
+                            id: 'springdata',
+                            name: 'Spring Data JPA',
+                            time: '6 hours',
+                            details: 'Database integration, repositories, queries',
+                            subtopics: [
+                                'JPA vs Hibernate',
+                                'Entity Mapping (@Entity, @Table, @Column)',
+                                'Repository Interface',
+                                'CRUD Operations',
+                                'Custom Queries (@Query)',
+                                'Relationships (OneToMany, ManyToOne)',
+                                'Build DB-backed API'
+                            ]
+                        },
+                        {
+                            id: 'springsecurity',
+                            name: 'Spring Security Basics',
+                            time: '4 hours',
+                            details: 'Authentication, JWT basics',
+                            subtopics: [
+                                'Spring Security Architecture',
+                                'Basic Authentication',
+                                'JWT Token Basics',
+                                'SecurityConfig Setup',
+                                'Securing Endpoints',
+                                'Simple Login/Register API'
+                            ]
+                        },
+                        {
+                            id: 'testing',
+                            name: 'Testing Spring Boot',
+                            time: '3 hours',
+                            details: 'JUnit, MockMvc, integration tests',
+                            subtopics: [
+                                'JUnit 5 Basics',
+                                '@SpringBootTest',
+                                'MockMvc for API Testing',
+                                'Mockito for Mocking',
+                                'Write 5 Test Cases'
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'dsa',
+                    title: 'DSA & Problem Solving',
+                    icon: '🧮',
+                    description: 'Time Complexity, Essential 60-70 Problems',
+                    estimatedHours: 30,
+                    unlocked: true,
+                    topics: [
+                        {
+                            id: 'complexity',
+                            name: 'Time & Space Complexity',
+                            time: '3 hours',
+                            details: 'Big O notation, analyzing algorithms',
+                            subtopics: [
+                                'What is Big O, Omega, Theta?',
+                                'Common Time Complexities (O(1), O(n), O(log n), O(n²))',
+                                'Space Complexity Analysis',
+                                'How to Calculate Complexity',
+                                'Practice: Analyze 10 code snippets'
+                            ]
+                        },
+                        {
+                            id: 'arrays',
+                            name: 'Array Problems',
+                            time: '6 hours',
+                            details: '15 essential problems',
+                            subtopics: [
+                                'Two Sum, Three Sum',
+                                'Max Subarray (Kadane\'s)',
+                                'Merge Intervals',
+                                'Rotate Array',
+                                'Buy/Sell Stock',
+                                '10 more medium problems'
+                            ]
+                        },
+                        {
+                            id: 'strings-dsa',
+                            name: 'String Problems',
+                            time: '4 hours',
+                            details: '10 essential problems',
+                            subtopics: [
+                                'Valid Anagram',
+                                'Longest Substring Without Repeating',
+                                'Palindrome Check',
+                                'String Reversal Variations',
+                                '6 more medium problems'
+                            ]
+                        },
+                        {
+                            id: 'linkedlist',
+                            name: 'Linked List',
+                            time: '5 hours',
+                            details: '10 problems',
+                            subtopics: [
+                                'Reverse Linked List',
+                                'Detect Cycle',
+                                'Merge Two Sorted Lists',
+                                'Remove Nth Node',
+                                '6 more problems'
+                            ]
+                        },
+                        {
+                            id: 'trees',
+                            name: 'Binary Trees',
+                            time: '5 hours',
+                            details: '10 problems',
+                            subtopics: [
+                                'Inorder, Preorder, Postorder Traversal',
+                                'Level Order Traversal',
+                                'Height/Depth of Tree',
+                                'Validate BST',
+                                '6 more problems'
+                            ]
+                        },
+                        {
+                            id: 'recursion',
+                            name: 'Recursion & Backtracking',
+                            time: '4 hours',
+                            details: '8 problems',
+                            subtopics: [
+                                'Fibonacci Series',
+                                'Factorial',
+                                'Permutations',
+                                'Subsets',
+                                '4 more problems'
+                            ]
+                        },
+                        {
+                            id: 'sorting',
+                            name: 'Sorting & Searching',
+                            time: '3 hours',
+                            details: '6 problems',
+                            subtopics: [
+                                'Binary Search',
+                                'Merge Sort',
+                                'Quick Sort',
+                                'Search in Rotated Array',
+                                '2 more problems'
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'manual-coding',
+                    title: 'Manual Coding Practice',
+                    icon: '✍️',
+                    description: 'Write code on paper/whiteboard without IDE',
+                    estimatedHours: 10,
+                    unlocked: true,
+                    topics: [
+                        {
+                            id: 'syntax',
+                            name: 'Core Syntax Practice',
+                            time: '2 hours',
+                            details: 'Write 20 basic programs on paper',
+                            subtopics: [
+                                'Hello World',
+                                'Prime Number Check',
+                                'Factorial',
+                                'Fibonacci Series',
+                                'Palindrome Check',
+                                'Reverse String',
+                                'Sum of Digits',
+                                'Armstrong Number',
+                                '12 more basic programs'
+                            ]
+                        },
+                        {
+                            id: 'collections-manual',
+                            name: 'Collections without IDE',
+                            time: '3 hours',
+                            details: 'Write collection operations manually',
+                            subtopics: [
+                                'ArrayList Operations',
+                                'HashMap Operations',
+                                'Sorting Custom Objects',
+                                'Stream API Operations',
+                                'Lambda Expressions'
+                            ]
+                        },
+                        {
+                            id: 'restapi-manual',
+                            name: 'REST Controller on Paper',
+                            time: '3 hours',
+                            details: 'Write Spring Boot controllers manually',
+                            subtopics: [
+                                'Simple GET Controller',
+                                'POST with @RequestBody',
+                                'CRUD Controller',
+                                'Exception Handling',
+                                'JPA Repository Usage'
+                            ]
+                        },
+                        {
+                            id: 'interview-coding',
+                            name: 'Interview Simulation',
+                            time: '2 hours',
+                            details: 'Practice like real interview',
+                            subtopics: [
+                                'Write 5 medium problems on paper',
+                                'Explain your approach verbally',
+                                'Handle edge cases',
+                                'Optimize and discuss',
+                                'Time yourself (30 min per problem)'
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'nodejs',
+                    title: 'Node.js Revision',
+                    icon: '🟢',
+                    description: 'Express, REST APIs, Middleware, Authentication',
+                    estimatedHours: 15,
+                    unlocked: false,
+                    topics: [
+                        {
+                            id: 'node-basics',
+                            name: 'Node.js Core Concepts',
+                            time: '3 hours',
+                            details: 'Event loop, modules, async/await',
+                            subtopics: [
+                                'Event Loop & Non-blocking I/O',
+                                'CommonJS vs ES6 Modules',
+                                'Built-in Modules (fs, path, http)',
+                                'Async/Await & Promises',
+                                'Error Handling'
+                            ]
+                        },
+                        {
+                            id: 'express',
+                            name: 'Express.js Framework',
+                            time: '4 hours',
+                            details: 'Routing, middleware, REST APIs',
+                            subtopics: [
+                                'Express Setup',
+                                'Routing & HTTP Methods',
+                                'Middleware (built-in, custom)',
+                                'Request/Response Handling',
+                                'Error Handling Middleware',
+                                'Build 2 REST APIs'
+                            ]
+                        },
+                        {
+                            id: 'mongodb',
+                            name: 'MongoDB with Mongoose',
+                            time: '4 hours',
+                            details: 'Schema, CRUD, relationships',
+                            subtopics: [
+                                'MongoDB Basics',
+                                'Mongoose Schema & Models',
+                                'CRUD Operations',
+                                'Relationships (populate)',
+                                'Validation',
+                                'Build DB-backed API'
+                            ]
+                        },
+                        {
+                            id: 'auth',
+                            name: 'Authentication (JWT)',
+                            time: '3 hours',
+                            details: 'JWT, bcrypt, protected routes',
+                            subtopics: [
+                                'Password Hashing (bcrypt)',
+                                'JWT Token Generation',
+                                'Login/Register Flow',
+                                'Protected Routes Middleware',
+                                'Token Verification'
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'docker',
+                    title: 'Docker Basics',
+                    icon: '🐳',
+                    description: 'Containers, Images, Docker Compose',
+                    estimatedHours: 8,
+                    unlocked: false,
+                    topics: [
+                        {
+                            id: 'docker-intro',
+                            name: 'Docker Fundamentals',
+                            time: '2 hours',
+                            details: 'What, why, architecture',
+                            subtopics: [
+                                'What is Docker?',
+                                'Containers vs VMs',
+                                'Docker Architecture',
+                                'Installation & Setup',
+                                'Basic Commands (run, ps, stop)'
+                            ]
+                        },
+                        {
+                            id: 'dockerfile',
+                            name: 'Dockerfile & Images',
+                            time: '3 hours',
+                            details: 'Create custom images',
+                            subtopics: [
+                                'Dockerfile Syntax',
+                                'Common Instructions (FROM, RUN, COPY, CMD)',
+                                'Build Images',
+                                'Push to Docker Hub',
+                                'Dockerize Spring Boot App',
+                                'Dockerize Node.js App'
+                            ]
+                        },
+                        {
+                            id: 'docker-compose',
+                            name: 'Docker Compose',
+                            time: '2 hours',
+                            details: 'Multi-container apps',
+                            subtopics: [
+                                'docker-compose.yml Syntax',
+                                'Services, Networks, Volumes',
+                                'App + Database Setup',
+                                'Common Commands (up, down, logs)'
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDPbugPNIcG8NFOmIB7ebTHACIAorn550U",
+            authDomain: "upnext-step.firebaseapp.com",
+            projectId: "upnext-step",
+            storageBucket: "upnext-step.firebasestorage.app",
+            messagingSenderId: "908873262744",
+            appId: "1:908873262744:web:44ebc5e21d1edf180652ed"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // State Management (synced with Firebase)
+        let state = {
+            streak: 0,
+            lastActiveDate: null,
+            topicsCompleted: 0,
+            totalHours: 0,
+            progress: {}
+        };
+
+        // Firebase sync status indicator
+        let syncIndicator = null;
+        let hasUnsavedChanges = false;
+        let lastSyncTime = Date.now();
+
+        // Initialize
+        function init() {
+            createSyncIndicator();
+            loadFromFirebase().then(() => {
+                updateStreak();
+                renderSkillTree();
+                updateOverallStats();
+                startSmartSync();
+                addBeforeUnloadHandler();
+            });
+        }
+
+        // Create sync status indicator
+        function createSyncIndicator() {
+            syncIndicator = document.createElement('div');
+            syncIndicator.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: white;
+                padding: 10px 20px;
+                border-radius: 25px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                font-size: 14px;
+                font-weight: bold;
+                z-index: 9999;
+                display: none;
+            `;
+            document.body.appendChild(syncIndicator);
+        }
+
+        // Show sync status
+        function showSyncStatus(message, color = '#58cc02') {
+            syncIndicator.textContent = message;
+            syncIndicator.style.color = color;
+            syncIndicator.style.display = 'block';
+            setTimeout(() => {
+                syncIndicator.style.display = 'none';
+            }, 2000);
+        }
+
+        // Load from Firebase
+        async function loadFromFirebase() {
+            try {
+                const doc = await db.collection('progress').doc('bhanu').get();
+
+                if (doc.exists) {
+                    state = doc.data();
+                    localStorage.setItem('learningTrackerState', JSON.stringify(state));
+                    showSyncStatus('☁️ Synced from cloud!', '#58cc02');
+                } else {
+                    // First time - initialize
+                    loadState();
+                    await saveToFirebase();
+                }
+            } catch (error) {
+                console.error('Firebase load error:', error);
+                // Fallback to localStorage
+                loadState();
+                showSyncStatus('⚠️ Offline mode', '#ff9500');
+            }
+        }
+
+        // Save to Firebase (optimized)
+        async function saveToFirebase() {
+            try {
+                lastSyncTime = Date.now();
+                await db.collection('progress').doc('bhanu').set(state);
+                hasUnsavedChanges = false;
+                showSyncStatus('☁️ Saved to cloud', '#58cc02');
+                console.log('✅ Firebase write at:', new Date().toLocaleTimeString());
+            } catch (error) {
+                console.error('Firebase save error:', error);
+                showSyncStatus('⚠️ Sync failed', '#ff3b30');
+            }
+        }
+
+        // Load state from localStorage (fallback)
+        function loadState() {
+            const saved = localStorage.getItem('learningTrackerState');
+            if (saved) {
+                state = JSON.parse(saved);
+            } else {
+                // Initialize progress for all topics
+                learningPath.modules.forEach(module => {
+                    module.topics.forEach(topic => {
+                        state.progress[topic.id] = {
+                            completed: false,
+                            subtopicsCompleted: []
+                        };
+                    });
+                });
+                saveState();
+            }
+        }
+
+        // Save state to localStorage
+        function saveState() {
+            localStorage.setItem('learningTrackerState', JSON.stringify(state));
+            // Mark that we have unsaved changes
+            hasUnsavedChanges = true;
+        }
+
+        // Smart sync - only sync when there are actual changes
+        function startSmartSync() {
+            // Sync every 5 minutes IF there are unsaved changes
+            setInterval(() => {
+                if (hasUnsavedChanges) {
+                    saveToFirebase();
+                    hasUnsavedChanges = false;
+                }
+            }, 300000); // 5 minutes (instead of 30 seconds)
+        }
+
+        // Save before closing tab/window
+        function addBeforeUnloadHandler() {
+            window.addEventListener('beforeunload', (e) => {
+                if (hasUnsavedChanges) {
+                    saveToFirebase();
+                }
+            });
+        }
+
+        // Manual sync function (for user control)
+        window.manualSync = async function() {
+            await saveToFirebase();
+            hasUnsavedChanges = false;
+            showSyncStatus('☁️ Manual sync complete!', '#58cc02');
+        };
+
+        // Update streak
+        function updateStreak() {
+            const today = new Date().toDateString();
+            const lastDate = state.lastActiveDate;
+
+            if (lastDate !== today) {
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+
+                if (lastDate === yesterday.toDateString()) {
+                    state.streak++;
+                } else if (lastDate !== today) {
+                    state.streak = 1;
+                }
+
+                state.lastActiveDate = today;
+                saveState();
+            }
+
+            document.getElementById('streak-count').textContent = state.streak;
+        }
+
+        // Render skill tree
+        function renderSkillTree() {
+            const container = document.getElementById('skill-tree');
+            container.innerHTML = '';
+
+            learningPath.modules.forEach((module, index) => {
+                const moduleEl = createModuleElement(module, index);
+                container.appendChild(moduleEl);
+            });
+        }
+
+        // Create module element
+        function createModuleElement(module, index) {
+            const div = document.createElement('div');
+            div.className = 'skill-module';
+
+            // Calculate module progress
+            const totalTopics = module.topics.length;
+            const completedTopics = module.topics.filter(t =>
+                state.progress[t.id] && state.progress[t.id].completed
+            ).length;
+            const progressPercent = Math.round((completedTopics / totalTopics) * 100);
+
+            // Check if module is unlocked
+            if (!module.unlocked && index > 0) {
+                const prevModule = learningPath.modules[index - 1];
+                const prevCompleted = prevModule.topics.filter(t =>
+                    state.progress[t.id] && state.progress[t.id].completed
+                ).length;
+
+                if (prevCompleted >= prevModule.topics.length * 0.7) {
+                    module.unlocked = true;
+                } else {
+                    div.classList.add('locked');
+                }
+            }
+
+            if (completedTopics === totalTopics) {
+                div.classList.add('completed');
+            }
+
+            div.innerHTML = `
+                <div class="module-header">
+                    <div class="module-title">
+                        <div class="module-icon">${module.icon}</div>
+                        <div>
+                            <h2>${module.title}</h2>
+                            <p>${module.description} • ${module.estimatedHours} hours</p>
+                        </div>
+                    </div>
+                    <div class="module-progress">
+                        <div class="module-progress-text">${completedTopics}/${totalTopics} Topics</div>
+                        <div class="module-progress-bar">
+                            <div class="module-progress-fill" style="width: ${progressPercent}%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="topics-grid">
+                    ${module.topics.map(topic => createTopicCard(topic)).join('')}
+                </div>
+            `;
+
+            return div;
+        }
+
+        // Create topic card
+        function createTopicCard(topic) {
+            const isCompleted = state.progress[topic.id] && state.progress[topic.id].completed;
+            const status = isCompleted ? '✅' : '⭐';
+
+            return `
+                <div class="topic-card ${isCompleted ? 'completed' : ''}" onclick="openTopicModal('${topic.id}')">
+                    <div class="topic-header">
+                        <span class="topic-name">${topic.name}</span>
+                        <span class="topic-status">${status}</span>
+                    </div>
+                    <div class="topic-details">${topic.details}</div>
+                    <span class="topic-time">⏱️ ${topic.time}</span>
+                    <button class="practice-btn" onclick="event.stopPropagation(); openTopicModal('${topic.id}')">
+                        ${isCompleted ? 'Review' : 'Start Learning'}
+                    </button>
+                </div>
+            `;
+        }
+
+        // Open topic modal
+        window.openTopicModal = function(topicId) {
+            const topic = findTopicById(topicId);
+            if (!topic) return;
+
+            const modal = document.getElementById('topic-modal');
+            const title = document.getElementById('modal-title');
+            const body = document.getElementById('modal-body');
+
+            title.textContent = topic.name;
+
+            const topicProgress = state.progress[topicId] || { completed: false, subtopicsCompleted: [] };
+
+            body.innerHTML = `
+                <p style="color: #666; margin-bottom: 20px;">
+                    <strong>Time Required:</strong> ${topic.time}<br>
+                    <strong>Details:</strong> ${topic.details}
+                </p>
+                <h3 style="margin-bottom: 15px;">Checklist:</h3>
+                <ul class="subtopics-list">
+                    ${topic.subtopics.map((subtopic, index) => `
+                        <li class="subtopic-item ${topicProgress.subtopicsCompleted.includes(index) ? 'completed' : ''}">
+                            <span>${subtopic}</span>
+                            <input
+                                type="checkbox"
+                                class="checkbox-custom"
+                                ${topicProgress.subtopicsCompleted.includes(index) ? 'checked' : ''}
+                                onchange="toggleSubtopic('${topicId}', ${index})"
+                            >
+                        </li>
+                    `).join('')}
+                </ul>
+                <button class="complete-topic-btn" onclick="completeTopic('${topicId}')">
+                    ${topicProgress.completed ? '✅ Completed' : 'Mark as Complete'}
+                </button>
+            `;
+
+            modal.classList.add('active');
+        };
+
+        // Close modal
+        window.closeModal = function() {
+            document.getElementById('topic-modal').classList.remove('active');
+        };
+
+        // Toggle subtopic
+        window.toggleSubtopic = function(topicId, subtopicIndex) {
+            if (!state.progress[topicId]) {
+                state.progress[topicId] = { completed: false, subtopicsCompleted: [] };
+            }
+
+            const completed = state.progress[topicId].subtopicsCompleted;
+            const index = completed.indexOf(subtopicIndex);
+
+            if (index > -1) {
+                completed.splice(index, 1);
+            } else {
+                completed.push(subtopicIndex);
+            }
+
+            saveState();
+        };
+
+        // Complete topic
+        window.completeTopic = function(topicId) {
+            const topic = findTopicById(topicId);
+            if (!topic) return;
+
+            if (!state.progress[topicId]) {
+                state.progress[topicId] = { completed: false, subtopicsCompleted: [] };
+            }
+
+            state.progress[topicId].completed = true;
+            state.topicsCompleted++;
+
+            // Add hours
+            const hours = parseFloat(topic.time.split(' ')[0]);
+            state.totalHours += hours;
+
+            saveState();
+            updateStreak();
+            renderSkillTree();
+            updateOverallStats();
+            closeModal();
+
+            // Celebration effect
+            alert(`🎉 Congrats! You completed "${topic.name}"! Keep going! 💪`);
+        };
+
+        // Find topic by ID
+        function findTopicById(topicId) {
+            for (const module of learningPath.modules) {
+                const topic = module.topics.find(t => t.id === topicId);
+                if (topic) return topic;
+            }
+            return null;
+        }
+
+        // Update overall stats
+        function updateOverallStats() {
+            document.getElementById('topics-completed').textContent = state.topicsCompleted;
+            document.getElementById('total-hours').textContent = Math.round(state.totalHours);
+
+            // Calculate overall progress
+            const totalTopics = learningPath.modules.reduce((sum, m) => sum + m.topics.length, 0);
+            const overallPercent = Math.round((state.topicsCompleted / totalTopics) * 100);
+
+            const progressBar = document.getElementById('overall-progress');
+            progressBar.style.width = overallPercent + '%';
+            progressBar.querySelector('.progress-text').textContent = overallPercent + '% Complete';
+        }
+
+        // Reset progress
+        window.resetProgress = async function() {
+            if (confirm('⚠️ Reset ALL progress?\n\nThis will delete:\n- All completed topics\n- Your streak\n- Total hours\n\nFrom both device AND cloud!\n\nThis CANNOT be undone!')) {
+                localStorage.removeItem('learningTrackerState');
+                state = {
+                    streak: 0,
+                    lastActiveDate: null,
+                    topicsCompleted: 0,
+                    totalHours: 0,
+                    progress: {}
+                };
+                learningPath.modules.forEach(module => {
+                    module.topics.forEach(topic => {
+                        state.progress[topic.id] = {
+                            completed: false,
+                            subtopicsCompleted: []
+                        };
+                    });
+                });
+                await saveToFirebase(); // Sync reset to cloud
+                updateStreak();
+                renderSkillTree();
+                updateOverallStats();
+                showSyncStatus('🔄 Reset complete!', '#ff9500');
+            }
+        };
+
+        // Export progress (download backup)
+        window.exportProgress = function() {
+            const dataStr = JSON.stringify(state, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            const date = new Date().toISOString().split('T')[0];
+            link.download = `learning-backup-${date}.json`;
+            link.click();
+            showSyncStatus('📥 Backup downloaded!', '#1cb0f6');
+        };
+
+        // Import progress (restore from backup)
+        window.importProgress = function() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'application/json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = async (event) => {
+                    try {
+                        const imported = JSON.parse(event.target.result);
+                        state = imported;
+                        saveState(); // This will also sync to Firebase
+                        await loadFromFirebase(); // Reload to refresh UI
+                        updateStreak();
+                        renderSkillTree();
+                        updateOverallStats();
+                        showSyncStatus('📤 Restored & synced!', '#58cc02');
+                    } catch (err) {
+                        showSyncStatus('❌ Import failed', '#ff3b30');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        };
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>

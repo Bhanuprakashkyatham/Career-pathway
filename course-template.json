@@ -1,0 +1,323 @@
+{
+  "meta": {
+    "template_name": "Java Backend Developer - 60 Day Roadmap",
+    "created_by": "Bhanu Prakash Kyatham",
+    "target_role": "Full Stack Java Developer",
+    "duration_days": 60,
+    "version": "1.0"
+  },
+  "courses": [
+    {
+      "id": 1,
+      "name": "Spring Boot Mastery",
+      "icon": "🍃",
+      "color": "#6aaf50",
+      "target_hours": 40,
+      "priority": "CRITICAL",
+      "subcourses": [
+        {
+          "id": 101,
+          "name": "Spring Boot Complete Tutorial - Telusko",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=35EQXmHKZYs",
+          "duration": 4.5,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        },
+        {
+          "id": 102,
+          "name": "Spring Boot REST API",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=9SGDpanrc8U",
+          "duration": 3,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        },
+        {
+          "id": 103,
+          "name": "Spring Data JPA Tutorial",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=8SGI_XS5OPw",
+          "duration": 5,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        },
+        {
+          "id": 104,
+          "name": "Spring Boot Microservices",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=BnknNTN8icw",
+          "duration": 6,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        },
+        {
+          "id": 105,
+          "name": "Spring Security Tutorial",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=her_7pa0vrg",
+          "duration": 4,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "DSA Practice (LeetCode)",
+      "icon": "💻",
+      "color": "#ffa726",
+      "target_hours": 21,
+      "priority": "HIGH",
+      "subcourses": [
+        {
+          "id": 201,
+          "name": "Arrays & Strings - Two Sum",
+          "type": "external",
+          "url": "https://leetcode.com/problems/two-sum/",
+          "target": 1,
+          "completed": 0,
+          "notes": ""
+        },
+        {
+          "id": 202,
+          "name": "Arrays - Best Time to Buy Stock",
+          "type": "external",
+          "url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+          "target": 1,
+          "completed": 0,
+          "notes": ""
+        },
+        {
+          "id": 203,
+          "name": "Strings - Valid Anagram",
+          "type": "external",
+          "url": "https://leetcode.com/problems/valid-anagram/",
+          "target": 1,
+          "completed": 0,
+          "notes": ""
+        },
+        {
+          "id": 204,
+          "name": "Hash Maps - Contains Duplicate",
+          "type": "external",
+          "url": "https://leetcode.com/problems/contains-duplicate/",
+          "target": 1,
+          "completed": 0,
+          "notes": ""
+        },
+        {
+          "id": 205,
+          "name": "Stacks - Valid Parentheses",
+          "type": "external",
+          "url": "https://leetcode.com/problems/valid-parentheses/",
+          "target": 1,
+          "completed": 0,
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Java Core Concepts",
+      "icon": "☕",
+      "color": "#e74c3c",
+      "target_hours": 30,
+      "priority": "HIGH",
+      "subcourses": [
+        {
+          "id": 301,
+          "name": "Java Collections Framework",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=rzA7UJ-hQn4",
+          "duration": 3,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        },
+        {
+          "id": 302,
+          "name": "Java 8 Features - Streams & Lambda",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=t1-YZ6bF-g0",
+          "duration": 4,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        },
+        {
+          "id": 303,
+          "name": "Multithreading in Java",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=r_MbozD32eo",
+          "duration": 3.5,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        },
+        {
+          "id": 304,
+          "name": "Exception Handling Deep Dive",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=1XAfapkBQjk",
+          "duration": 2,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Docker & Deployment",
+      "icon": "🐳",
+      "color": "#3498db",
+      "target_hours": 15,
+      "priority": "MEDIUM",
+      "subcourses": [
+        {
+          "id": 401,
+          "name": "Docker Tutorial for Beginners",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=3c-iBn73dDE",
+          "duration": 3,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        },
+        {
+          "id": 402,
+          "name": "Dockerize Spring Boot App",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=FlSup_eelYE",
+          "duration": 2.5,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        },
+        {
+          "id": 403,
+          "name": "Docker Compose Tutorial",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=HG6yIjZapSA",
+          "duration": 2,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "System Design Basics",
+      "icon": "🏗️",
+      "color": "#9b59b6",
+      "target_hours": 12,
+      "priority": "MEDIUM",
+      "subcourses": [
+        {
+          "id": 501,
+          "name": "System Design Primer",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=FSR1s2b-l_I",
+          "duration": 2.5,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        },
+        {
+          "id": 502,
+          "name": "Database Design Fundamentals",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=ztHopE5Wnpc",
+          "duration": 3,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        },
+        {
+          "id": 503,
+          "name": "API Design Best Practices",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=_gQaygjm_hg",
+          "duration": 2,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Interview Preparation",
+      "icon": "🎤",
+      "color": "#e67e22",
+      "target_hours": 18,
+      "priority": "HIGH",
+      "subcourses": [
+        {
+          "id": 601,
+          "name": "Java Interview Questions",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=HyDACIa4dXE",
+          "duration": 3,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        },
+        {
+          "id": 602,
+          "name": "Spring Boot Interview Questions",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=L7ML63K5i0k",
+          "duration": 2.5,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        },
+        {
+          "id": 603,
+          "name": "Behavioral Interview Prep",
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=1mHjMNZZvFo",
+          "duration": 2,
+          "completed": false,
+          "time_spent": 0,
+          "progress": 0,
+          "notes": ""
+        },
+        {
+          "id": 604,
+          "name": "Mock Interview Practice",
+          "type": "external",
+          "url": "https://www.pramp.com/",
+          "target": 5,
+          "completed": 0,
+          "notes": ""
+        }
+      ]
+    }
+  ]
+}

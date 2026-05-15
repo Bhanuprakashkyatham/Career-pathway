@@ -243,6 +243,206 @@
             font-size: 1.2em;
         }
 
+        /* Skill Bars */
+        .skill-bar-container {
+            margin: 20px 0;
+        }
+
+        .skill-item {
+            margin-bottom: 25px;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .skill-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .skill-percentage {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .skill-percentage .target {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .skill-bar-bg {
+            height: 30px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-bar-current {
+            height: 100%;
+            background: #ffa726;
+            border-radius: 15px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            transition: width 1s ease;
+            z-index: 2;
+        }
+
+        .skill-bar-target {
+            height: 100%;
+            background: #667eea;
+            border-radius: 15px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        /* Performance Cards */
+        .performance-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+        }
+
+        .perf-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .perf-label {
+            font-size: 1em;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .perf-target {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .perf-progress-bar {
+            height: 8px;
+            background: #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .perf-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        /* Salary Timeline */
+        .salary-timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+            padding: 40px 0;
+        }
+
+        .salary-timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ffa726 0%, #667eea 50%, #42a5f5 100%);
+            z-index: 0;
+        }
+
+        .salary-point {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .salary-marker {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            border: 4px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .salary-point.current .salary-marker {
+            background: #ffa726;
+            width: 24px;
+            height: 24px;
+        }
+
+        .salary-point.target .salary-marker {
+            background: #667eea;
+            width: 28px;
+            height: 28px;
+            animation: pulse 2s infinite;
+        }
+
+        .salary-point.future .salary-marker {
+            background: #42a5f5;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        .salary-content {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .salary-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .salary-amount {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .salary-date {
+            font-size: 0.85em;
+            color: #666;
+        }
+
         @media (max-width: 768px) {
             .documents-grid {
                 grid-template-columns: 1fr;
@@ -254,6 +454,22 @@
 
             .stat-number {
                 font-size: 2em;
+            }
+
+            .salary-timeline {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .salary-timeline::before {
+                width: 3px;
+                height: 100%;
+                left: 50%;
+                top: 0;
+            }
+
+            .chart-container {
+                height: 250px;
             }
         }
     </style>
@@ -268,6 +484,12 @@
 
             <div class="goal-banner">
                 <span class="emoji">🎯</span> GOAL: Get 8-15 LPA Job within 60 Days (May 14 - July 13, 2026)
+            </div>
+
+            <div style="margin-top: 20px;">
+                <a href="learning-tracker.html" class="btn-view" style="font-size: 1.1em; padding: 12px 30px;">
+                    📊 Open Learning Tracker →
+                </a>
             </div>
 
             <div class="stats">
@@ -304,7 +526,7 @@
                 </div>
                 <div class="doc-badge badge-critical">CRITICAL</div>
                 <div class="doc-badge badge-critical">READ FIRST</div>
-                <a href="START-HERE-ACTION-PLAN.md" class="btn-view">View Document →</a>
+                <a href="md-viewer.html?file=START-HERE-ACTION-PLAN.md" class="btn-view">View Document →</a>
             </div>
 
             <div class="doc-card priority-critical">
@@ -314,7 +536,7 @@
                     Complete summary of all 14 documents, your targets, timeline, and what was delivered. Quick overview of everything!
                 </div>
                 <div class="doc-badge badge-critical">OVERVIEW</div>
-                <a href="FINAL-SYNOPSIS.md" class="btn-view">View Document →</a>
+                <a href="md-viewer.html?file=FINAL-SYNOPSIS.md" class="btn-view">View Document →</a>
             </div>
 
             <div class="doc-card priority-critical">
@@ -324,7 +546,7 @@
                     ATS-optimized resume with metrics, achievements, and projects. Convert to PDF and start applying tonight!
                 </div>
                 <div class="doc-badge badge-critical">USE TONIGHT</div>
-                <a href="Resume_Optimized_Bhanu_Prakash.md" class="btn-view">View Document →</a>
+                <a href="md-viewer.html?file=Resume_Optimized_Bhanu_Prakash.md" class="btn-view">View Document →</a>
             </div>
         </div>
 
@@ -341,7 +563,7 @@
                     Master the 2-hour daily routine: 20 jobs/day system, cover letter templates, time-saving hacks, and weekly review process.
                 </div>
                 <div class="doc-badge badge-critical">DAILY USE</div>
-                <a href="daily-application-strategy.md" class="btn-view">View Document →</a>
+                <a href="md-viewer.html?file=daily-application-strategy.md" class="btn-view">View Document →</a>
             </div>
 
             <div class="doc-card priority-critical">
@@ -351,7 +573,7 @@
                     Track all 1200+ applications, responses, interviews. Log every company, role, and status. Update daily!
                 </div>
                 <div class="doc-badge badge-critical">UPDATE DAILY</div>
-                <a href="job-tracker.md" class="btn-view">View Document →</a>
+                <a href="md-viewer.html?file=job-tracker.md" class="btn-view">View Document →</a>
             </div>
 
             <div class="doc-card priority-high">
@@ -361,7 +583,7 @@
                     3 versions of perfect self-intro: Technical (90s), HR (60s), and Elevator pitch (30s). Practice 10+ times!
                 </div>
                 <div class="doc-badge badge-high">MEMORIZE</div>
-                <a href="self-introduction.md" class="btn-view">View Document →</a>
+                <a href="md-viewer.html?file=self-introduction.md" class="btn-view">View Document →</a>
             </div>
         </div>
 
@@ -378,7 +600,7 @@
                     Complete market analysis. Why Java + Spring Boot = 20-30% higher salary. Your career path decision made clear!
                 </div>
                 <div class="doc-badge badge-high">CAREER PATH</div>
-                <a href="java-vs-nodejs-analysis.md" class="btn-view">View Document →</a>
+                <a href="md-viewer.html?file=java-vs-nodejs-analysis.md" class="btn-view">View Document →</a>
             </div>
 
             <div class="doc-card priority-high">
@@ -388,7 +610,7 @@
                     Complete syllabus with weightage! Java (25%), Spring Boot (20%), Hibernate (15%), DSA (8%). Know exactly what to study.
                 </div>
                 <div class="doc-badge badge-high">STUDY GUIDE</div>
-                <a href="backend-interview-syllabus.md" class="btn-view">View Document →</a>
+                <a href="md-viewer.html?file=backend-interview-syllabus.md" class="btn-view">View Document →</a>
             </div>
 
             <div class="doc-card priority-high">
@@ -398,7 +620,7 @@
                     Day-by-day plan for 60 days! Hour-by-hour schedule, weekly focus areas, milestones, and daily tracking templates.
                 </div>
                 <div class="doc-badge badge-high">FOLLOW DAILY</div>
-                <a href="2-month-daily-roadmap.md" class="btn-view">View Document →</a>
+                <a href="md-viewer.html?file=2-month-daily-roadmap.md" class="btn-view">View Document →</a>
             </div>
 
             <div class="doc-card priority-high">
@@ -408,7 +630,7 @@
                     60-70 problems breakdown, paper coding mastery (3 phases), common mistakes, and time complexity cheat sheet.
                 </div>
                 <div class="doc-badge badge-high">30 MIN/DAY</div>
-                <a href="dsa-strategy-paper-coding.md" class="btn-view">View Document →</a>
+                <a href="md-viewer.html?file=dsa-strategy-paper-coding.md" class="btn-view">View Document →</a>
             </div>
         </div>
 
@@ -425,7 +647,7 @@
                     Complete Q&A guide! Behavioral questions with PERFECT answers, technical questions by topic, STAR method, and pre-interview checklist.
                 </div>
                 <div class="doc-badge badge-high">MEMORIZE</div>
-                <a href="interview-preparation.md" class="btn-view">View Document →</a>
+                <a href="md-viewer.html?file=interview-preparation.md" class="btn-view">View Document →</a>
             </div>
 
             <div class="doc-card priority-high">
@@ -436,7 +658,7 @@
                 </div>
                 <div class="doc-badge badge-high">UPDATE TONIGHT</div>
                 <div class="doc-badge badge-critical">3-DAY HACK</div>
-                <a href="linkedin-naukri-optimization.md" class="btn-view">View Document →</a>
+                <a href="md-viewer.html?file=linkedin-naukri-optimization.md" class="btn-view">View Document →</a>
             </div>
 
             <div class="doc-card priority-medium">
@@ -446,7 +668,176 @@
                     Quick reference document with your profile summary, tech skills, file system overview, and immediate action items.
                 </div>
                 <div class="doc-badge badge-medium">REFERENCE</div>
-                <a href="claude.md" class="btn-view">View Document →</a>
+                <a href="md-viewer.html?file=claude.md" class="btn-view">View Document →</a>
+            </div>
+        </div>
+
+        <!-- Progress & Performance Graphs -->
+        <div class="section-header">
+            <h2><span class="emoji">📊</span> Your Progress & Performance Analytics</h2>
+        </div>
+
+        <div style="background: white; border-radius: 12px; padding: 30px; margin: 20px 0; box-shadow: 0 5px 20px rgba(0,0,0,0.15);">
+            <!-- Skills Progress: Current vs Target -->
+            <h3 style="color: #667eea; margin-bottom: 25px;">🎯 Skills Transformation (Current → Target)</h3>
+
+            <div class="skill-bar-container">
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Spring Boot</span>
+                        <span class="skill-percentage"><span id="springboot-current">0</span>% → <span class="target">85%</span></span>
+                    </div>
+                    <div class="skill-bar-bg">
+                        <div class="skill-bar-current" style="width: 0%;" id="springboot-bar-current"></div>
+                        <div class="skill-bar-target" style="width: 85%;" id="springboot-bar-target"></div>
+                    </div>
+                </div>
+
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">DSA (Data Structures & Algorithms)</span>
+                        <span class="skill-percentage"><span id="dsa-current">30</span>% → <span class="target">70%</span></span>
+                    </div>
+                    <div class="skill-bar-bg">
+                        <div class="skill-bar-current" style="width: 30%;" id="dsa-bar-current"></div>
+                        <div class="skill-bar-target" style="width: 70%;" id="dsa-bar-target"></div>
+                    </div>
+                </div>
+
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Java Core Concepts</span>
+                        <span class="skill-percentage"><span id="java-current">65</span>% → <span class="target">90%</span></span>
+                    </div>
+                    <div class="skill-bar-bg">
+                        <div class="skill-bar-current" style="width: 65%;" id="java-bar-current"></div>
+                        <div class="skill-bar-target" style="width: 90%;" id="java-bar-target"></div>
+                    </div>
+                </div>
+
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Docker & Deployment</span>
+                        <span class="skill-percentage"><span id="docker-current">20</span>% → <span class="target">65%</span></span>
+                    </div>
+                    <div class="skill-bar-bg">
+                        <div class="skill-bar-current" style="width: 20%;" id="docker-bar-current"></div>
+                        <div class="skill-bar-target" style="width: 65%;" id="docker-bar-target"></div>
+                    </div>
+                </div>
+
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Interview Readiness</span>
+                        <span class="skill-percentage"><span id="interview-current">55</span>% → <span class="target">90%</span></span>
+                    </div>
+                    <div class="skill-bar-bg">
+                        <div class="skill-bar-current" style="width: 55%;" id="interview-bar-current"></div>
+                        <div class="skill-bar-target" style="width: 90%;" id="interview-bar-target"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 15px; padding: 12px; background: #f0f4ff; border-radius: 8px; font-size: 0.9em; color: #666;">
+                <strong style="color: #667eea;">Legend:</strong>
+                <span style="display: inline-block; width: 20px; height: 12px; background: #ffa726; border-radius: 3px; margin: 0 5px;"></span> Current Level
+                <span style="display: inline-block; width: 20px; height: 12px; background: #667eea; border-radius: 3px; margin: 0 5px;"></span> Target Level (Day 60)
+            </div>
+        </div>
+
+        <!-- Application & Interview Performance -->
+        <div style="background: white; border-radius: 12px; padding: 30px; margin: 20px 0; box-shadow: 0 5px 20px rgba(0,0,0,0.15);">
+            <h3 style="color: #667eea; margin-bottom: 25px;">📈 Application & Interview Performance</h3>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                <div class="performance-card">
+                    <div class="perf-number" id="total-applications">0</div>
+                    <div class="perf-label">Applications Sent</div>
+                    <div class="perf-target">Target: 1200+</div>
+                    <div class="perf-progress-bar">
+                        <div class="perf-progress-fill" id="apps-progress" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <div class="performance-card">
+                    <div class="perf-number" id="total-responses">0</div>
+                    <div class="perf-label">Recruiter Responses</div>
+                    <div class="perf-target">Target: 40-60</div>
+                    <div class="perf-progress-bar">
+                        <div class="perf-progress-fill" id="responses-progress" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <div class="performance-card">
+                    <div class="perf-number" id="total-interviews">0</div>
+                    <div class="perf-label">Interviews Scheduled</div>
+                    <div class="perf-target">Target: 20-40</div>
+                    <div class="perf-progress-bar">
+                        <div class="perf-progress-fill" id="interviews-progress" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <div class="performance-card">
+                    <div class="perf-number" id="total-offers">0</div>
+                    <div class="perf-label">Job Offers</div>
+                    <div class="perf-target">Target: 2-5</div>
+                    <div class="perf-progress-bar">
+                        <div class="perf-progress-fill" id="offers-progress" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly Application Chart -->
+            <h4 style="color: #667eea; margin: 30px 0 15px 0;">Weekly Application Trend</h4>
+            <div class="chart-container">
+                <canvas id="weeklyChart"></canvas>
+            </div>
+
+            <div style="margin-top: 20px; padding: 15px; background: #f0f4ff; border-radius: 8px; text-align: center;">
+                <strong style="color: #667eea;">💡 Update Tip:</strong> Edit these numbers in the JavaScript section at the bottom of this file to track your real progress!
+            </div>
+        </div>
+
+        <!-- Salary Progression -->
+        <div style="background: white; border-radius: 12px; padding: 30px; margin: 20px 0; box-shadow: 0 5px 20px rgba(0,0,0,0.15);">
+            <h3 style="color: #667eea; margin-bottom: 25px;">💰 Expected Salary Growth Trajectory</h3>
+
+            <div class="salary-timeline">
+                <div class="salary-point current">
+                    <div class="salary-marker"></div>
+                    <div class="salary-content">
+                        <div class="salary-title">Current</div>
+                        <div class="salary-amount">Your Package</div>
+                        <div class="salary-date">May 2026</div>
+                    </div>
+                </div>
+
+                <div class="salary-point target">
+                    <div class="salary-marker"></div>
+                    <div class="salary-content">
+                        <div class="salary-title">Next Job (60 days)</div>
+                        <div class="salary-amount">8-15 LPA</div>
+                        <div class="salary-date">July 2026</div>
+                    </div>
+                </div>
+
+                <div class="salary-point future">
+                    <div class="salary-marker"></div>
+                    <div class="salary-content">
+                        <div class="salary-title">With Microservices + AI</div>
+                        <div class="salary-amount">12-20 LPA</div>
+                        <div class="salary-date">2027</div>
+                    </div>
+                </div>
+
+                <div class="salary-point future">
+                    <div class="salary-marker"></div>
+                    <div class="salary-content">
+                        <div class="salary-title">Senior Level</div>
+                        <div class="salary-amount">25-40 LPA</div>
+                        <div class="salary-date">2028+</div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -463,7 +854,7 @@
                     Future learning roadmap! AI integration (learn in 2027), Docker/Kubernetes deep dive, AWS mastery. DON'T learn now - focus on Spring Boot!
                 </div>
                 <div class="doc-badge badge-future">FUTURE (2027)</div>
-                <a href="ai-deployment-future-learning.md" class="btn-view">View Document →</a>
+                <a href="md-viewer.html?file=ai-deployment-future-learning.md" class="btn-view">View Document →</a>
             </div>
         </div>
 
@@ -566,5 +957,193 @@
             </div>
         </div>
     </div>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // ============================================
+        // 📊 YOUR PERFORMANCE DATA - UPDATE THIS SECTION!
+        // ============================================
+
+        // Skills Progress (Update these as you learn!)
+        const skillsData = {
+            springboot: 0,    // Update from 0 to 85 over 60 days
+            dsa: 30,          // Update from 30 to 70
+            java: 65,         // Update from 65 to 90
+            docker: 20,       // Update from 20 to 65
+            interview: 55     // Update from 55 to 90
+        };
+
+        // Application Performance (Update these daily!)
+        const performanceData = {
+            applications: 0,    // Total applications sent (Target: 1200+)
+            responses: 0,       // Recruiter responses (Target: 40-60)
+            interviews: 0,      // Interviews scheduled (Target: 20-40)
+            offers: 0           // Job offers received (Target: 2-5)
+        };
+
+        // Weekly Application Data (Update every week!)
+        const weeklyApplications = [0, 0, 0, 0, 0, 0, 0, 0, 0]; // 9 weeks of data
+        const weekLabels = ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8', 'Week 9'];
+
+        // ============================================
+        // AUTO-UPDATE FUNCTIONS (Don't edit below)
+        // ============================================
+
+        // Update Skills Bars
+        function updateSkillBars() {
+            document.getElementById('springboot-current').textContent = skillsData.springboot;
+            document.getElementById('springboot-bar-current').style.width = skillsData.springboot + '%';
+
+            document.getElementById('dsa-current').textContent = skillsData.dsa;
+            document.getElementById('dsa-bar-current').style.width = skillsData.dsa + '%';
+
+            document.getElementById('java-current').textContent = skillsData.java;
+            document.getElementById('java-bar-current').style.width = skillsData.java + '%';
+
+            document.getElementById('docker-current').textContent = skillsData.docker;
+            document.getElementById('docker-bar-current').style.width = skillsData.docker + '%';
+
+            document.getElementById('interview-current').textContent = skillsData.interview;
+            document.getElementById('interview-bar-current').style.width = skillsData.interview + '%';
+        }
+
+        // Update Performance Cards
+        function updatePerformanceCards() {
+            document.getElementById('total-applications').textContent = performanceData.applications;
+            document.getElementById('apps-progress').style.width = Math.min((performanceData.applications / 1200) * 100, 100) + '%';
+
+            document.getElementById('total-responses').textContent = performanceData.responses;
+            document.getElementById('responses-progress').style.width = Math.min((performanceData.responses / 60) * 100, 100) + '%';
+
+            document.getElementById('total-interviews').textContent = performanceData.interviews;
+            document.getElementById('interviews-progress').style.width = Math.min((performanceData.interviews / 40) * 100, 100) + '%';
+
+            document.getElementById('total-offers').textContent = performanceData.offers;
+            document.getElementById('offers-progress').style.width = Math.min((performanceData.offers / 5) * 100, 100) + '%';
+        }
+
+        // Create Weekly Chart
+        function createWeeklyChart() {
+            const ctx = document.getElementById('weeklyChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: weekLabels,
+                    datasets: [{
+                        label: 'Applications Sent',
+                        data: weeklyApplications,
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }, {
+                        label: 'Target (150/week)',
+                        data: [150, 150, 150, 150, 150, 150, 150, 150, 150],
+                        type: 'line',
+                        borderColor: 'rgba(245, 87, 108, 1)',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 200,
+                            ticks: {
+                                stepSize: 50
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize all charts and data
+        window.addEventListener('load', function() {
+            updateSkillBars();
+            updatePerformanceCards();
+            createWeeklyChart();
+        });
+
+        // Dynamic date and progress calculations
+        const startDate = new Date('2026-05-14');
+        const endDate = new Date('2026-07-13');
+        const today = new Date();
+
+        // Calculate days
+        const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+        const daysPassed = Math.ceil((today - startDate) / (1000 * 60 * 60 * 24));
+        const daysRemaining = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24));
+
+        // Calculate current day number (1-indexed)
+        const currentDay = daysPassed > 0 ? daysPassed : 0;
+
+        // Update the stats
+        document.querySelectorAll('.stat-card')[1].querySelector('.stat-number').textContent = daysRemaining > 0 ? daysRemaining : 0;
+        document.querySelectorAll('.stat-card')[1].querySelector('.stat-label').textContent = daysRemaining > 0 ? 'Days Remaining' : 'Days Completed!';
+
+        // Update tonight's checklist header
+        const tonightHeader = document.querySelector('.checklist h3');
+        if (currentDay === 0) {
+            tonightHeader.innerHTML = '<span class="emoji">✅</span> TONIGHT\'S ACTION ITEMS (Before Sleep - May 13, 2026)';
+        } else if (currentDay > 0 && currentDay <= totalDays) {
+            tonightHeader.innerHTML = '<span class="emoji">✅</span> DAY ' + currentDay + ' CHECKLIST (Today: ' + today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ')';
+        }
+
+        // Update tomorrow's schedule header
+        const tomorrowHeader = document.querySelectorAll('.checklist h3')[1];
+        const nextDay = currentDay + 1;
+        const tomorrowDate = new Date(today);
+        tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+
+        if (currentDay >= 0 && currentDay < totalDays) {
+            if (currentDay === 0) {
+                tomorrowHeader.innerHTML = '<span class="emoji">🚀</span> TOMORROW (MAY 14, 2026) - DAY 1 SCHEDULE';
+            } else {
+                tomorrowHeader.innerHTML = '<span class="emoji">🚀</span> DAY ' + nextDay + ' SCHEDULE (' + tomorrowDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ')';
+            }
+        } else if (currentDay >= totalDays) {
+            tomorrowHeader.innerHTML = '<span class="emoji">🎉</span> PROGRAM COMPLETED! TIME TO REVIEW YOUR OFFERS';
+        }
+
+        // Update footer message
+        const footerMessage = document.querySelector('.footer div:last-child div:last-child');
+        if (currentDay < 0) {
+            const hoursUntilStart = Math.ceil((startDate - today) / (1000 * 60 * 60));
+            footerMessage.textContent = 'Your transformation begins in ' + hoursUntilStart + ' hours';
+        } else if (currentDay >= 0 && currentDay < totalDays) {
+            footerMessage.textContent = 'Day ' + (currentDay + 1) + ' of ' + totalDays + ' | You\'re ' + Math.round((currentDay / totalDays) * 100) + '% there!';
+        } else {
+            footerMessage.textContent = '60 days completed! Time to accept your offer! 🎉';
+        }
+
+        // Update goal banner if program is complete
+        if (currentDay >= totalDays) {
+            const goalBanner = document.querySelector('.goal-banner');
+            goalBanner.innerHTML = '<span class="emoji">🎉</span> PROGRAM COMPLETED! Review your job offers and accept the best one!';
+            goalBanner.style.background = 'linear-gradient(135deg, #4caf50 0%, #388e3c 100%)';
+        }
+
+        // Show progress percentage in title
+        if (currentDay > 0 && currentDay <= totalDays) {
+            const progressPercent = Math.round((currentDay / totalDays) * 100);
+            document.querySelector('h1').innerHTML = '<span class="emoji">🚀</span> Job Application System (' + progressPercent + '% Complete)';
+        } else if (currentDay > totalDays) {
+            document.querySelector('h1').innerHTML = '<span class="emoji">🎉</span> Job Application System (Complete!)';
+        }
+    </script>
 </body>
 </html>
